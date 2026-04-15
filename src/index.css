@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", serif;
+  
+  --color-burro: #fdfcf0;
+  --color-oro: #d4af37;
+  --color-terra: #4a3728;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-terra font-sans antialiased;
+  }
+}
