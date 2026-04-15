@@ -330,6 +330,51 @@ const galleryProducts = [
   }
 ];
 
+const capolavoriProducts = [
+  {
+    id: "c1",
+    name: "Pecorino Toscano",
+    description: "Selezione speciale della casa.",
+    image: "https://i.pinimg.com/736x/23/5d/ed/235deda4b82c2cea4c4674aa302ac07f.jpg"
+  },
+  {
+    id: "c2",
+    name: "Ricotta Fresca",
+    description: "Lavorazione artigianale quotidiana.",
+    image: "https://i.pinimg.com/736x/50/0b/7d/500b7d1969f3229c9a87bfd59058d0c0.jpg"
+  },
+  {
+    id: "c3",
+    name: "Formaggio Stagionato",
+    description: "Profumo intenso e struttura compatta.",
+    image: "https://i.pinimg.com/736x/47/ff/3b/47ff3bedb72e409370b80e4d84c83064.jpg"
+  },
+  {
+    id: "c4",
+    name: "Selezione della Fattoria",
+    description: "Equilibrio perfetto tra cremosita e sapore.",
+    image: "https://i.pinimg.com/736x/c3/18/54/c318543d2933280f84f57db305ca398f.jpg"
+  },
+  {
+    id: "c5",
+    name: "Tagliere Rustico",
+    description: "I nostri migliori tagli in un unico assaggio.",
+    image: "https://i.pinimg.com/1200x/8b/ae/28/8bae28a123ecc0cdfeb39eb95aafae58.jpg"
+  },
+  {
+    id: "c6",
+    name: "Specialita di Casa",
+    description: "Produzione limitata, gusto deciso.",
+    image: "https://i.pinimg.com/736x/b0/11/94/b01194084bf93befcadd2d9afc4a0cdc.jpg"
+  },
+  {
+    id: "c7",
+    name: "Gran Selezione",
+    description: "La proposta premium di I Nostri Capolavori.",
+    image: "https://i.pinimg.com/1200x/e2/38/7a/e2387a29d00e293f8dd334fa78b64606.jpg"
+  }
+];
+
 function TopPicks() {
   const [selectedId, setSelectedId] = useState(galleryProducts[0].id);
   const selectedProduct = galleryProducts.find((p) => p.id === selectedId) || galleryProducts[0];
@@ -496,9 +541,10 @@ function ProductCarousel() {
   const [index, setIndex] = useState(0);
   const [lastInteraction, setLastInteraction] = useState(Date.now());
   const [dragOffset, setDragOffset] = useState(0);
+  const visibleSideItems = 2;
 
   const move = (dir: number) => {
-    setIndex((prev) => (prev + dir + galleryProducts.length) % galleryProducts.length);
+    setIndex((prev) => (prev + dir + capolavoriProducts.length) % capolavoriProducts.length);
     setDragOffset(0);
     setLastInteraction(Date.now());
   };
@@ -508,7 +554,7 @@ function ProductCarousel() {
       const now = Date.now();
       // Only auto-move if 6 seconds have passed since last interaction
       if (now - lastInteraction > 6000) {
-        setIndex((prev) => (prev + 1) % galleryProducts.length);
+        setIndex((prev) => (prev + 1) % capolavoriProducts.length);
         setDragOffset(0);
       }
     }, 4000);
@@ -527,13 +573,13 @@ function ProductCarousel() {
       <div className="relative w-full max-w-6xl h-[250px] md:h-[500px] flex items-center justify-center perspective-[2000px] overflow-visible">
         {/* Mobile Side Buttons - Removed for cleaner look, swipe only */}
 
-        {galleryProducts.map((product, i) => {
+        {capolavoriProducts.map((product, i) => {
           let offset = i - index;
-          if (offset < -Math.floor(galleryProducts.length / 2)) offset += galleryProducts.length;
-          if (offset > Math.floor(galleryProducts.length / 2)) offset -= galleryProducts.length;
+          if (offset < -Math.floor(capolavoriProducts.length / 2)) offset += capolavoriProducts.length;
+          if (offset > Math.floor(capolavoriProducts.length / 2)) offset -= capolavoriProducts.length;
 
           const isActive = offset === 0;
-          const isVisible = Math.abs(offset) <= 2; // Show active + 2 on each side
+          const isVisible = Math.abs(offset) <= visibleSideItems; // Show active + same amount on both sides
           
           const baseSpacing = window.innerWidth < 768 ? 140 : 260;
           const xPos = offset * baseSpacing + dragOffset;
@@ -578,11 +624,17 @@ function ProductCarousel() {
                 transformStyle: "preserve-3d",
               }}
             >
-              <div className="w-full h-full relative group flex items-center justify-center">
+              <div
+                className={`w-full h-full relative group flex items-center justify-center rounded-[2rem] overflow-hidden bg-white ${
+                  isActive
+                    ? "border-4 border-[#4A6741] shadow-[0_20px_50px_-20px_rgba(74,103,65,0.8)]"
+                    : "border-2 border-[#4A6741]/60"
+                }`}
+              >
                 <motion.img 
                   src={product.image} 
                   alt={product.name}
-                  className="w-full h-full object-contain transition-transform duration-1000 group-hover:scale-110"
+                  className="w-full h-full object-contain p-1 rounded-[2rem] transition-transform duration-1000 group-hover:scale-110"
                   referrerPolicy="no-referrer"
                   animate={{
                     y: isActive ? [0, -10, 0] : 0
@@ -613,7 +665,7 @@ function ProductCarousel() {
         </button>
         
         <div className="flex gap-2">
-          {galleryProducts.map((_, i) => (
+          {capolavoriProducts.map((_, i) => (
             <button
               key={i}
               onClick={() => setIndex(i)}
@@ -649,10 +701,10 @@ function ProductCarousel() {
               <div className="h-px w-8 bg-oro/30" />
             </div>
             <h4 className="font-serif text-4xl md:text-6xl text-terra leading-none tracking-tight">
-              {galleryProducts[index].name}
+              {capolavoriProducts[index].name}
             </h4>
             <p className="text-terra/60 font-light leading-relaxed text-lg md:text-xl max-w-lg mx-auto">
-              {galleryProducts[index].description}
+              {capolavoriProducts[index].description}
             </p>
           </motion.div>
         </AnimatePresence>
